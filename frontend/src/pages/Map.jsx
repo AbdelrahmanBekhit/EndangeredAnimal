@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import Header from "../components/Header";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
-const CallAnimal = async (country) => {
+const CallAnimal = async (country, setAnimalData) => {
   try {
     const response = await fetch(`http://localhost:8080/CallAnimal?country=${country}`);
 
@@ -19,6 +20,7 @@ const CallAnimal = async (country) => {
     });
   } catch (error) {
     console.error("Error fetching animal data:", error);
+    // Optionally, set an error state here to display an error message in the UI
   }
 };
 

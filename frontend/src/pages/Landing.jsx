@@ -5,7 +5,7 @@ import Landing_card from "../components/Landing_card";
 
 function Landing () {
     return (
-        <div className="bg-[#d6d5c4] min-h-screen">
+        <div className="bg-[#d6d5c4] min-h-screen flex flex-col items-center p-6">
             <Header />
 
             {/* Hero Section */}

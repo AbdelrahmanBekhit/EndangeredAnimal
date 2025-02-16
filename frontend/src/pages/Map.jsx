@@ -65,4 +65,4 @@ const WorldMap = () => {
   );
 };
 
-export default WorldMap;
+export default Map;

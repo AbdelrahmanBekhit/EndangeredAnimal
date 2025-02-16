@@ -1,11 +1,10 @@
-package org.src.endangeredanimal.Controller;
+package Controller;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
-import java.util.ArrayList;
 
-import org.src.endangeredanimal.DTO.Animal;
+import DTO.Animal;
 
 public class AnimalDBConnector{
     private Connection connection;
@@ -28,11 +27,11 @@ public class AnimalDBConnector{
     }
 
     // Utility function to add new entry to a table if not exists and get the ID
-    private int addEntryAndGetId(String table, String column, String value) {
+    private Integer addEntryAndGetId(String table, String column, String value) {
         // Check if the entry exists first
-        String existingValue = getEntryIfExists(table, column, value);
+        Integer existingValue = getEntryIfExists(table, column, value);
         if (existingValue != null) {
-            return Integer.parseInt(existingValue);  // Return the existing ID if entry is found
+            return existingValue;  // Return the existing ID if entry is found
         } else {
             String insertQuery = "INSERT INTO " + table + " (" + column + ") VALUES (?)";
             try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
@@ -52,8 +51,8 @@ public class AnimalDBConnector{
     // Add animal, checking and adding regions, countries, and locations
     public void addAnimal(String name, String region, String country, String location, String threat, String predictedExtinction) {
         int regionId = addEntryAndGetId("region", "name", region);
-        int countryId = addEntryAndGetId("country", "name", region);
-        int locationId = addEntryAndGetId("location", "name", region);
+        int countryId = addEntryAndGetId("country", "name", country);
+        int locationId = addEntryAndGetId("location", "name", location);
 
         String query = "INSERT INTO animal (name, region_id, country_id, location_id, threat, predicted_extinction) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
@@ -142,37 +141,24 @@ public class AnimalDBConnector{
     }
 
     public List<Animal> getAllAnimalsByCountry(String country) {
-        String countryQuery = "SELECT id FROM country WHERE country = ?";
-        String animalQuery = "SELECT * FROM animal WHERE country_id = ?";
+        String query = "SELECT * FROM animal WHERE country_id = (SELECT id FROM country WHERE name = ?)";
         List<Animal> animals = new ArrayList<>();
-        
-        try (PreparedStatement countryStatement = connection.prepareStatement(countryQuery)) {
-            countryStatement.setString(1, country);
-            ResultSet countryResultSet = countryStatement.executeQuery();
-            
-            if (countryResultSet.next()) {
-                int countryId = countryResultSet.getInt("id");
-                
-                try (PreparedStatement animalStatement = connection.prepareStatement(animalQuery)) {
-                    animalStatement.setInt(1, countryId);
-                    ResultSet animalResultSet = animalStatement.executeQuery();
-                    
-                    while (animalResultSet.next()) {
-                        Animal animal = new Animal();
-                        animal.setName(animalResultSet.getString("name"));
-                        animal.setRegion(getRegionById(animalResultSet.getInt("region_id")));
-                        animal.setCountry(country);
-                        animal.setLocation(getLocationById(animalResultSet.getInt("location_id")));
-                        animal.setThreat(animalResultSet.getString("threat"));
-                        animal.setPredictedExtinction(animalResultSet.getString("predicted_extinction"));
-                        animals.add(animal);
-                    }
-                }
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, country);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Animal animal = new Animal();
+                animal.setName(resultSet.getString("name"));
+                animal.setRegion(getRegionById(resultSet.getInt("region_id")));
+                animal.setCountry(country);
+                animal.setLocation(getLocationById(resultSet.getInt("location_id")));
+                animal.setThreat(resultSet.getString("threat"));
+                animal.setPredictedExtinction(resultSet.getString("predicted_extinction"));
+                animals.add(animal);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
         return animals;
     }
 
@@ -221,12 +207,12 @@ public class AnimalDBConnector{
     }
 
     private String getRegionById(int regionId) {
-        String query = "SELECT region FROM region WHERE id = ?";
+        String query = "SELECT name FROM region WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, regionId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getString("region");
+                return resultSet.getString("name");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -235,12 +221,12 @@ public class AnimalDBConnector{
     }
 
     private String getCountryById(int countryId) {
-        String query = "SELECT country FROM country WHERE id = ?";
+        String query = "SELECT name FROM country WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, countryId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getString("country");
+                return resultSet.getString("name");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -249,12 +235,12 @@ public class AnimalDBConnector{
     }
 
     private String getLocationById(int locationId) {
-        String query = "SELECT location FROM location WHERE id = ?";
+        String query = "SELECT name FROM location WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, locationId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getString("location");
+                return resultSet.getString("name");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -277,13 +263,13 @@ public class AnimalDBConnector{
         return true;
     }
 
-    private String getEntryIfExists(String table, String column, String value) {
-        String query = "SELECT " + column + " FROM " + table + " WHERE " + column + " = ?";
+    private Integer getEntryIfExists(String table, String column, String value) {
+        String query = "SELECT id FROM " + table + " WHERE " + column + " = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, value);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getString(column);  // Return the value if found
+                return rs.getInt("id");  // Return the ID if found
             }
         } catch (SQLException e) {
             e.printStackTrace();

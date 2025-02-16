@@ -1,4 +1,4 @@
-package org.src.endangeredanimal.DTO;
+package DTO;
 
 public class Animal {
     //Atributes

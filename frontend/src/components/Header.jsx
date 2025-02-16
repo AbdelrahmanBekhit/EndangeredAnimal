@@ -44,7 +44,7 @@ function Header() {
                         Map
                     </Link>
                 </div>
-                <div className="w-32 text-center">
+                <div className="w-24 text-center">
                     <Link
                         className={`transition-transform hover:scale-110 ${
                             location.pathname === "/volunteer" ? "text-[#4a4a3f] text-3xl" : ""

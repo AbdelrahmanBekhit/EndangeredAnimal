@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import Header from "../components/Header"
 import Landing_card from "../components/Landing_card";
 
@@ -10,11 +11,8 @@ function Landing () {
             {/* Hero Section */}
             <div className="flex flex-col items-center justify-center mt-15">
                 <div className="flex gap-5">
-                    <span className="px-10 py-4 text-xl font-bold bg-[#a8a793] rounded-2xl shadow-md">
-                        Protect Our Planet
-                    </span>
-                    <span className="px-10 py-4 text-xl font-bold bg-[#a8a793] rounded-2xl shadow-md">
-                        Your Actions Matter
+                    <span className="text-4xl font-extrabold whitespace-nowrap">
+                        Your Actions Matter!
                     </span>
                 </div>
 
@@ -26,10 +24,12 @@ function Landing () {
 
             {/* Statistics Section */}
             <div className="flex justify-center gap-10 -mt-15">
-                <Landing_card name="Planet"/>
-                <Landing_card name="Stats"/>
-                <Landing_card name="Species"/>
-
+                <Link to="/stats" >
+                    <Landing_card name="Stats"/>
+                </Link>
+                <Link to="/species" >
+                    <Landing_card name="Species"/>
+                </Link>
             </div>
         </div>
     )

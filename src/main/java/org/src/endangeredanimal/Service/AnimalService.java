@@ -2,10 +2,13 @@ package org.src.endangeredanimal.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
+
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 import org.src.endangeredanimal.Controller.AnimalDBConnector;
+import org.src.endangeredanimal.DTO.Animal;
 
 import org.springframework.stereotype.Service;
 
@@ -19,10 +22,18 @@ public class AnimalService {
     public void init() {
         String filePath = "general_files/machine_learning.csv";
         importDataFromCSV(filePath);
+        getAnimalByName("Tiger");
     }
 
     private void addAnimal(String name, String region, String country, String location, String threat, String predictedExtinction) {
         dbController.addAnimal(name, region, country, location, threat, predictedExtinction);
+    }
+
+    private void getAnimalByName(String name){
+        List<Animal> animals = dbController.getAnimalByName(name);
+        for (Animal animal : animals) {
+            System.out.printf(animal.getName(), animal.getRegion(), animal.getCountry(), animal.getLocation(), animal.getThreat(), animal.getPredictedExtinction());
+        }
     }
 
     private void importDataFromCSV(String filePath) {

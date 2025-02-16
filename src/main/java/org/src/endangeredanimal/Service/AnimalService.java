@@ -30,12 +30,13 @@ public class AnimalService {
         @GetMapping("/CallAnimal")
         public ResponseEntity<List<Map<String,String>>> getAnimalData(@RequestParam String country) {
             List<Animal> animals = dbController.getAllAnimalsByCountry(country);
-            
+
+            System.out.println("api backend:" + country + animals);
+
             List<Map<String, String>> animalDictList = animals.stream().map(animal -> Map.of(
                 "name", animal.getName(),
                 "region", animal.getRegion(),
                 "country", animal.getCountry(),
-                "location", animal.getLocation(),
                 "predictedExtinction", animal.getPredictedExtinction()
             )).collect(Collectors.toList());
 
@@ -60,8 +61,8 @@ public class AnimalService {
             String[] data;
             while ((data = csvReader.readNext()) != null) {
                 String name = data[0];
-                String region = data[1];
-                String country = data[2];
+                String country = data[1];
+                String region = data[2];
                 String predictedExtinction = data[3];
 
                 // Add the animal to the database

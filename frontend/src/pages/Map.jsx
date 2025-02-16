@@ -5,6 +5,7 @@ const CallAnimal = async (country) => {
   try {
     const response = await fetch(`http://localhost:8080/CallAnimal?country=${country}`);
 
+    console.log("Response:", response);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

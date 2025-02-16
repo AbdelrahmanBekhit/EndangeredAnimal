@@ -6,6 +6,8 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import Landing from './pages/Landing.jsx'
 import Map from './pages/Map.jsx'
 import Donate from './pages/Donate.jsx'
+import Stats from './pages/Stats.jsx'
+// import Species from './pages/Species.jsx'
 import Volunteer from './pages/Volunteer.jsx'
 
 const router = createBrowserRouter([
@@ -24,7 +26,15 @@ const router = createBrowserRouter([
   {
     path: '/volunteer',
     element: <Volunteer/>
-  }
+  },
+  {
+    path: '/stats',
+    element: <Stats/>
+  },
+  // {
+  //   path: '/species',
+  //   element: <Species/>
+  // }
 ])
 
 

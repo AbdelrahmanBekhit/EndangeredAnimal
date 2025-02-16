@@ -9,9 +9,8 @@ import Donate from './pages/Donate.jsx'
 import Volunteer from './pages/Volunteer.jsx'
 
 const router = createBrowserRouter([
-  
   {
-    path: '/',
+    path : '/',
     element: <Landing/>
   },
   {

@@ -1,43 +1,78 @@
-
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
 // Function to determine color based on extinction prediction
 const getColorByExtinctionPrediction = (years) => {
-  if (years === null) return "#4caf50"; // Green if no extinction prediction
-  if (years <= 10) return "#ff4c4c"; // Red for critically endangered (0-10 years)
-  if (years <= 30) return "#ff914c"; // Orange for endangered (11-30 years)
-  if (years <= 50) return "#ffd700"; // Yellow for vulnerable (31-50 years)
+  if (years === null) return null; // Green if no extinction prediction
+  if (years <= 2) return "#ff4c4c"; // Red for critically endangered (0-10 years)
+  if (years <= 5) return "#ff914c"; // Orange for endangered (11-30 years)
+  if (years <= 20) return "#ffd700"; // Yellow for vulnerable (31-50 years)
   return "#91c483"; // Light green for near threatened (51+ years)
 };
+
+const CallAnimal = async (country) => {
+  try {
+    const response = await fetch(`http://localhost:8080/CallAnimal?country=${country}`);
+    console.log("Response status:", response.status);  // Log the response status
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Animal data:", data);
+
+    setAnimalData(data);
+    data.forEach((item) => {
+      console.log(`Country: ${item.country}, Animal: ${item.name}, Habitat: ${item.region}, Extinction: ${item.predictedExtinction}`);
+    });
+  } catch (error) {
+    console.error("Error fetching animal data:", error);  // Log the error to get more info
+  }
+};
+
 
 const Map = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [animalData, setAnimalData] = useState([]);
   const [allAnimals, setAllAnimals] = useState([]);
 
-  // Load dataset once when component mounts
   useEffect(() => {
+    if (!selectedCountry) return;
     const fetchData = async () => {
       try {
-        const response = await fetch("**********fiiilllllllleeeeeeeeeeeeeeeeee.json*******"); // Ensure correct path
+        const encodedCountry = encodeURIComponent(selectedCountry);
+        const response = await fetch(`http://localhost:8080/CallAnimal?country=${encodedCountry}`);
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        setAllAnimals(data);
+
+        const formattedData = data.map((animal) => ({
+          ...animal,
+          predicted_extinction_years: animal.predicted_extinction_years
+            ? parseInt(animal.predicted_extinction_years, 10)
+            : null,
+        }));
+        console.log("Formatted data:", formattedData);
+        setAllAnimals(formattedData);
       } catch (error) {
         console.error("Error loading animal dataset:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    if (selectedCountry && allAnimals.length > 0) {
+      setAnimalData(allAnimals);
+    }
+  }, [selectedCountry, allAnimals]);
 
   const handleCountryClick = (country) => {
     setSelectedCountry(country);
-    const filteredData = allAnimals.filter((animal) => animal.country.toLowerCase() === country.toLowerCase());
-    setAnimalData(filteredData);
   };
 
   return (
@@ -85,10 +120,10 @@ const Map = () => {
               <div
                 key={index}
                 className="w-48 h-24 rounded-lg flex-shrink-0 inline-flex flex-col items-center justify-center p-2 text-[#4a4a3f] font-medium text-center shadow-md"
-                style={{ backgroundColor: getColorByExtinctionPrediction(animal.predicted_extinction_years) }}
+                style={{ backgroundColor: getColorByExtinctionPrediction(animal.predictedExtinction) }}
               >
-                <p className="text-lg font-bold">{animal.animal}</p>
-                <p className="text-sm">Extinction: {animal.predicted_extinction_years !== null ? `${animal.predicted_extinction_years} years` : "Not at risk"}</p>
+                <p className="text-lg font-bold">{animal.name}</p>
+                <p className="text-sm">Extinction: {animal.predictedExtinction !== null ? `${animal.predictedExtinction} years` : "Not at risk"}</p>
               </div>
             ))
           ) : (

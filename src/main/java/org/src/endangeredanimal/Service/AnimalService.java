@@ -60,10 +60,10 @@ public class AnimalService {
         try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
             String[] data;
             while ((data = csvReader.readNext()) != null) {
-                String name = data[0];
                 String country = data[1];
                 String region = data[2];
                 String predictedExtinction = data[3];
+                String name = data[4];
 
                 // Add the animal to the database
                 addAnimal(name, region, country, predictedExtinction);

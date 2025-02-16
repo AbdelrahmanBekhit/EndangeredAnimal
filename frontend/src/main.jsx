@@ -11,10 +11,6 @@ import Volunteer from './pages/Volunteer.jsx'
 const router = createBrowserRouter([
   {
     path : '/',
-    element: <App/>
-  },
-  {
-    path: '/landing',
     element: <Landing/>
   },
   {

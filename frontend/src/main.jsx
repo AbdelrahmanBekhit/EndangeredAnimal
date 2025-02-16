@@ -11,10 +11,6 @@ import Voulenteer from './pages/Voulenteer.jsx'
 const router = createBrowserRouter([
   {
     path : '/',
-    element: <App/>
-  },
-  {
-    path: '/landing',
     element: <Landing/>
   },
   {

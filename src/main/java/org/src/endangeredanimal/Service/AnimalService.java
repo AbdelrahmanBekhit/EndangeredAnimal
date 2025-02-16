@@ -3,10 +3,18 @@ package org.src.endangeredanimal.Service;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import jakarta.annotation.PostConstruct;
 
 import Controller.AnimalDBConnector;
@@ -16,6 +24,26 @@ import DTO.Animal;
 public class AnimalService {
     final private AnimalDBConnector dbController = new AnimalDBConnector();
 
+    @RestController
+    public class AnimalController {
+
+        @GetMapping("/CallAnimal")
+        public ResponseEntity<List<Map<String,String>>> getAnimalData(@RequestParam String country) {
+            List<Animal> animals = dbController.getAllAnimalsByCountry(country);
+
+            System.out.println("api backend:" + country + animals);
+
+            List<Map<String, String>> animalDictList = animals.stream().map(animal -> Map.of(
+                "name", animal.getName(),
+                "region", animal.getRegion(),
+                "country", animal.getCountry(),
+                "predictedExtinction", animal.getPredictedExtinction()
+            )).collect(Collectors.toList());
+
+            return ResponseEntity.ok(animalDictList);
+        }
+    }
+
     @PostConstruct
     public void init() {
         String filePath = "general_files/machine_learning.csv";
@@ -24,8 +52,8 @@ public class AnimalService {
         }
     }
 
-    private void addAnimal(String name, String region, String country, String location, String predictedExtinction) {
-        dbController.addAnimal(name, region, country, location, predictedExtinction);
+    private void addAnimal(String name, String region, String country, String predictedExtinction) {
+        dbController.addAnimal(name, region, country, predictedExtinction);
     }
 
     private void importDataFromCSV(String filePath) {
@@ -33,13 +61,12 @@ public class AnimalService {
             String[] data;
             while ((data = csvReader.readNext()) != null) {
                 String name = data[0];
-                String region = data[1];
-                String country = data[2];
-                String location = data[3];
-                String predictedExtinction = data[4];
+                String country = data[1];
+                String region = data[2];
+                String predictedExtinction = data[3];
 
                 // Add the animal to the database
-                addAnimal(name, region, country, location, predictedExtinction);
+                addAnimal(name, region, country, predictedExtinction);
             }
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();

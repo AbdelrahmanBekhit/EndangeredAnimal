@@ -1,14 +1,22 @@
-
-import Header from "../components/Header";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
 const CallAnimal = async (country) => {
   try {
-    console.log("Fetching animal data for:", country);
-    const response = await fetch(`https://your-api.com/CallAnimal?country=${country}`);
+    const response = await fetch(`http://localhost:8080/CallAnimal?country=${country}`);
+
+    console.log("Response:", response);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const data = await response.json();
     console.log("Animal data:", data);
+
+    setAnimalData(data);
+    data.forEach((item) => {
+      console.log(`Country: ${item.country}, Animal: ${item.animal}, Habitat: ${item.habitat}`);
+    });
   } catch (error) {
     console.error("Error fetching animal data:", error);
   }
@@ -16,12 +24,13 @@ const CallAnimal = async (country) => {
 
 const geoUrl = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
 
-export default function MapWithSpecies() {
+const Map = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [animalData, setAnimalData] = useState([]);
 
   const handleCountryClick = (country) => {
-    setSelectedCountry(country);
-    CallAnimal(country);
+    setSelectedCountry(country); // Set the selected country
+    CallAnimal(country, setAnimalData);
   };
 
   return (
@@ -72,4 +81,6 @@ export default function MapWithSpecies() {
       </section>
     </div>
   );
-}
+};
+
+export default Map;

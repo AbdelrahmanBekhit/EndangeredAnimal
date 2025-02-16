@@ -49,20 +49,19 @@ public class AnimalDBConnector{
     }
 
     // Add animal, checking and adding regions, countries, and locations
-    public void addAnimal(String name, String region, String country, String location, String threat, String predictedExtinction) {
+    public void addAnimal(String name, String region, String country, String location, String predictedExtinction) {
         int regionId = addEntryAndGetId("region", "name", region);
         int countryId = addEntryAndGetId("country", "name", country);
         int locationId = addEntryAndGetId("location", "name", location);
 
-        String query = "INSERT INTO animal (name, region_id, country_id, location_id, threat, predicted_extinction) " +
+        String query = "INSERT INTO animal (name, region_id, country_id, location_id, predicted_extinction) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             statement.setInt(2, regionId);
             statement.setInt(3, countryId);
             statement.setInt(4, locationId);
-            statement.setString(5, threat);
-            statement.setString(6, predictedExtinction);
+            statement.setString(5, predictedExtinction);
             statement.executeUpdate();
             System.out.println("Animal added successfully.");
         } catch (SQLException e) {
@@ -71,20 +70,19 @@ public class AnimalDBConnector{
     }
 
     // Update animal details
-    public void updateAnimal(int id, String name, String region, String country, String location, String threat, String predictedExtinction) {
+    public void updateAnimal(int id, String name, String region, String country, String location, String predictedExtinction) {
         int regionId = addEntryAndGetId("region", "name", region);
         int countryId = addEntryAndGetId("country", "name", region);
         int locationId = addEntryAndGetId("location", "name", region);
 
         String query = "UPDATE animal SET name = ?, region_id = ?, country_id = ?, location_id = ?, " +
-                       "threat = ?, predicted_extinction = ? WHERE id = ?";
+                       "predicted_extinction = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             statement.setInt(2, regionId);
             statement.setInt(3, countryId);
             statement.setInt(4, locationId);
-            statement.setString(5, threat);
-            statement.setString(6, predictedExtinction);
+            statement.setString(5, predictedExtinction);
             statement.setInt(7, id);
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {
@@ -129,7 +127,6 @@ public class AnimalDBConnector{
                 animal.setRegion(getRegionById(resultSet.getInt("region_id")));
                 animal.setCountry(getCountryById(resultSet.getInt("country_id")));
                 animal.setLocation(getLocationById(resultSet.getInt("location_id")));
-                animal.setThreat(resultSet.getString("threat"));
                 animal.setPredictedExtinction(resultSet.getString("predicted_extinction"));
                 animalDetails.add(animal);
             }
@@ -152,7 +149,6 @@ public class AnimalDBConnector{
                 animal.setRegion(getRegionById(resultSet.getInt("region_id")));
                 animal.setCountry(country);
                 animal.setLocation(getLocationById(resultSet.getInt("location_id")));
-                animal.setThreat(resultSet.getString("threat"));
                 animal.setPredictedExtinction(resultSet.getString("predicted_extinction"));
                 animals.add(animal);
             }
@@ -174,7 +170,6 @@ public class AnimalDBConnector{
                 animal.setRegion(region);
                 animal.setCountry(getCountryById(resultSet.getInt("country_id")));
                 animal.setLocation(getLocationById(resultSet.getInt("location_id")));
-                animal.setThreat(resultSet.getString("threat"));
                 animal.setPredictedExtinction(resultSet.getString("predicted_extinction"));
                 animals.add(animal);
             }
@@ -196,7 +191,6 @@ public class AnimalDBConnector{
                 animal.setRegion(getRegionById(resultSet.getInt("region_id")));
                 animal.setCountry(getCountryById(resultSet.getInt("country_id")));
                 animal.setLocation(location);
-                animal.setThreat(resultSet.getString("threat"));
                 animal.setPredictedExtinction(resultSet.getString("predicted_extinction"));
                 animals.add(animal);
             }

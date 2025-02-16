@@ -24,8 +24,8 @@ public class AnimalService {
         }
     }
 
-    private void addAnimal(String name, String region, String country, String location, String threat, String predictedExtinction) {
-        dbController.addAnimal(name, region, country, location, threat, predictedExtinction);
+    private void addAnimal(String name, String region, String country, String location, String predictedExtinction) {
+        dbController.addAnimal(name, region, country, location, predictedExtinction);
     }
 
     private void importDataFromCSV(String filePath) {
@@ -36,11 +36,10 @@ public class AnimalService {
                 String region = data[1];
                 String country = data[2];
                 String location = data[3];
-                String threat = data[4];
-                String predictedExtinction = data[5];
+                String predictedExtinction = data[4];
 
                 // Add the animal to the database
-                addAnimal(name, region, country, location, threat, predictedExtinction);
+                addAnimal(name, region, country, location, predictedExtinction);
             }
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();

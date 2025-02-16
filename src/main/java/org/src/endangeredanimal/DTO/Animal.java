@@ -41,13 +41,13 @@ public class Animal {
     }
 
     //Getters
-    public final int getId() {return id;}
-    public final String getName() {return name;}
-    public final String getRegion() {return region;}
-    public final String getCountry() {return country;}
-    public final String getPredictedExtinction() {return predictedExtinction;}
-    public final String getDescription() {return description;}
-    public final String getImageLink() {return imageLink;}
+    public final int getId() {return this.id;}
+    public final String getName() {return this.name;}
+    public final String getRegion() {return this.region;}
+    public final String getCountry() {return this.country;}
+    public final String getPredictedExtinction() {return this.predictedExtinction;}
+    public final String getDescription() {return this.description;}
+    public final String getImageLink() {return this.imageLink;}
 
     //Setters
     public final void setId(final int id) {this.id = id;}

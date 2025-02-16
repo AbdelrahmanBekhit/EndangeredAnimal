@@ -4,10 +4,10 @@ import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
 // Function to determine color based on extinction prediction
 const getColorByExtinctionPrediction = (years) => {
-  if (years === null) return null; // Green if no extinction prediction
-  if (years <= 2) return "#ff4c4c"; // Red for critically endangered (0-10 years)
-  if (years <= 5) return "#ff914c"; // Orange for endangered (11-30 years)
-  if (years <= 20) return "#ffd700"; // Yellow for vulnerable (31-50 years)
+  if (!Number.isInteger(years)) return "#4caf50"; // Green if not an integer
+  if (Number.isInteger(years) <= 2) return "#ff4c4c"; // Red for critically endangered (0-10 years)
+  if (Number.isInteger(years) <= 5) return "#ff914c"; // Orange for endangered (11-30 years)
+  if (Number.isInteger(years) <= 20) return "#ffd700"; // Yellow for vulnerable (31-50 years)
   return "#91c483"; // Light green for near threatened (51+ years)
 };
 
@@ -52,8 +52,8 @@ const Map = () => {
 
         const formattedData = data.map((animal) => ({
           ...animal,
-          predicted_extinction_years: animal.predicted_extinction_years
-            ? parseInt(animal.predicted_extinction_years, 10)
+          predictedExtinction: animal.predictedExtinction
+            ? parseInt(animal.predictedExtinction, 10)
             : null,
         }));
         console.log("Formatted data:", formattedData);

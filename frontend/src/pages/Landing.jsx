@@ -1,9 +1,5 @@
-
 import { Link } from "react-router-dom";
 import Header from "../components/Header"
-import Landing_card from "../components/Landing_card";
-import { Link } from "react-router-dom";
-import Header from "../components/Header";
 import Landing_card from "../components/Landing_card";
 
 function Landing() {
@@ -29,9 +25,6 @@ function Landing() {
             <div className="flex flex-wrap justify-center gap-15 pb-10">
                 <Link to="/stats">
                     <Landing_card name="Stats" />
-                </Link>
-                <Link to="/species">
-                    <Landing_card name="Species" />
                 </Link>
             </div>
         </div>

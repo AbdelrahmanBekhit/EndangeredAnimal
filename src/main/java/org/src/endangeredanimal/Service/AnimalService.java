@@ -31,14 +31,14 @@ public class AnimalService {
         public ResponseEntity<List<Map<String,String>>> getAnimalData(@RequestParam String country) {
             List<Animal> animals = dbController.getAllAnimalsByCountry(country);
 
-            System.out.println("api backend:" + country + animals);
-
-            List<Map<String, String>> animalDictList = animals.stream().map(animal -> Map.of(
-                "name", animal.getName(),
-                "region", animal.getRegion(),
-                "country", animal.getCountry(),
-                "predictedExtinction", animal.getPredictedExtinction()
-            )).collect(Collectors.toList());
+            List<Map<String, String>> animalDictList = animals.stream()
+                .filter(animal -> animal.getPredictedExtinction() != null)
+                .map(animal -> Map.of(
+                    "name", animal.getName(),
+                    "region", animal.getRegion(),
+                    "country", animal.getCountry(),
+                    "predictedExtinction", animal.getPredictedExtinction()
+                )).collect(Collectors.toList());
 
             return ResponseEntity.ok(animalDictList);
         }

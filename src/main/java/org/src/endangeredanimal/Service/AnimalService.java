@@ -19,22 +19,13 @@ public class AnimalService {
     @PostConstruct
     public void init() {
         String filePath = "general_files/machine_learning.csv";
-//        if (dbController.isAnimalTableEmpty()){
-        importDataFromCSV(filePath);
-//        }
-        getAnimalByRegion("Africa");
+        if (dbController.isAnimalTableEmpty()){
+            importDataFromCSV(filePath);
+        }
     }
 
     private void addAnimal(String name, String region, String country, String location, String threat, String predictedExtinction) {
         dbController.addAnimal(name, region, country, location, threat, predictedExtinction);
-    }
-
-    private void getAnimalByRegion(String name){
-        List<Animal> animals = dbController.getAllAnimalsByRegion(name);
-        System.out.println(animals);
-        for (Animal animal : animals) {
-            System.out.printf(animal.getName(), animal.getRegion(), animal.getCountry(), animal.getLocation(), animal.getThreat(), animal.getPredictedExtinction());
-        }
     }
 
     private void importDataFromCSV(String filePath) {

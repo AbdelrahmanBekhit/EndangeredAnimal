@@ -114,25 +114,43 @@ const Map = () => {
         Endangered Animals within {selectedCountry || "Selected Country"}
       </h2>
       <section className="h-1/4 w-11/12 bg-[#d6d2c4] p-4 rounded-2xl shadow-lg flex flex-col items-center overflow-x-auto">
-        <div className="flex gap-4 p-4 rounded-2xl overflow-x-auto whitespace-nowrap w-full">
-          {animalData.length > 0 ? (
-            animalData.map((animal, index) => (
+      <div className="flex gap-4 p-4 rounded-2xl overflow-x-auto whitespace-nowrap w-full">
+        {animalData.length > 0 ? (
+          animalData.map((animal, index) => {
+            const extinctionYears = isNaN(animal.predictedExtinction)
+              ? "Not expected to go extinct soon"
+              : animal.predictedExtinction;
+
+            return (
               <div
                 key={index}
                 className="w-48 h-24 rounded-lg flex-shrink-0 inline-flex flex-col items-center justify-center p-2 text-[#4a4a3f] font-medium text-center shadow-md"
-                style={{ backgroundColor: getColorByExtinctionPrediction(animal.predictedExtinction) }}
+                style={{
+                  backgroundColor: getColorByExtinctionPrediction(
+                    extinctionYears === "Not expected to go extinct soon" ? null : extinctionYears
+                  ),
+                  wordWrap: "break-word",
+                  overflow: "hidden",
+                }}
               >
-                <p className="text-lg font-bold">{animal.name}</p>
-                <p className="text-sm">Extinction: {animal.predictedExtinction !== null ? `${animal.predictedExtinction} years` : "Not at risk"}</p>
+                <p className="text-sm font-semibold">{animal.name}</p>
+                <p className="text-xs text-center leading-tight">
+                  Extinction: {extinctionYears}
+                </p>
               </div>
-            ))
-          ) : (
-            [...Array(5)].map((_, index) => (
-              <div key={index} className="w-48 h-24 bg-[#b5a88f] rounded-lg flex-shrink-0 inline-block"></div>
-            ))
-          )}
-        </div>
-      </section>
+            );
+          })
+        ) : selectedCountry ? (
+          <p className="text-sm text-[#4a4a3f] font-medium text-center">
+            No endangered species found for {selectedCountry}.
+          </p>
+        ) : (
+          <p className="text-sm text-[#4a4a3f] font-medium text-center">
+            Select a country to view endangered species.
+          </p>
+        )}
+      </div>
+    </section>
     </div>
   );
 };

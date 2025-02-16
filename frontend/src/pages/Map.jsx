@@ -76,9 +76,13 @@ const Map = () => {
       <section className="h-1/4 w-11/12 bg-[#d6d2c4] p-4 rounded-2xl shadow-lg flex flex-col items-center overflow-x-auto">
         <div className="flex gap-4 p-4 rounded-2xl overflow-x-auto whitespace-nowrap w-full">
         {animalData.map((item, index) => (
-          <div key={index} className="w-24 h-12 bg-[#b5a88f] rounded-lg flex-shrink-0 flex items-center justify-center text-xs text-white font-bold p-2">
+          <div
+              key={index}
+              className="w-47 h-24 bg-[#b5a88f] rounded-lg flex-shrink-0 flex items-center justify-center text-xl text-white font-bold p-2"
+              title={`Predicted year of extinction: ${item.predicted_extinction}`}
+          >
             {item.name}
-          </div>
+        </div>
         ))}
         </div>
       </section>

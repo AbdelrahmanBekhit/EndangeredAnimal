@@ -60,13 +60,15 @@ function Donate() {
                     </button>
                 </div>
 
-                {/* Custom Amount Input */}
+                {/* Custom Amount Input (No Up/Down Buttons) */}
                 <input 
                     type="number" 
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="Enter custom amount" 
-                    className="mt-4 w-full px-4 py-2 rounded-lg border border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4a4a3f] text-2xl font-bold text-center"
+                    className="mt-4 w-full px-4 py-2 rounded-lg border border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4a4a3f] text-2xl font-bold text-center 
+                    appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none 
+                    [-moz-appearance:textfield]" 
                 />
 
                 {/* Donate Button */}

@@ -25,7 +25,7 @@ import Header from "../components/Header";
 
         {/* Chart Section */}
         <div className="bg-[#d6d5c4] p-4 rounded-xl shadow-lg w-full max-w-3xl flex justify-center mb-6">
-            <img src="../../public/global-living-planet-index.png" alt="Living Planet Index Chart" className="rounded-lg" />
+            <img src="../../public/global-living-planet-index.webp" alt="Living Planet Index Chart" className="rounded-lg" />
         </div>
 
         {/* Key Insights */}

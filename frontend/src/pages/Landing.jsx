@@ -23,7 +23,7 @@ function Landing () {
             </div>
 
             {/* Statistics Section */}
-            <div className="flex justify-center gap-10 -mt-15">
+            <div className="flex flex-wrap justify-center gap-15 mb-10">
                 <Link to="/stats" >
                     <Landing_card name="Stats"/>
                 </Link>

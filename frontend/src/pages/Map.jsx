@@ -36,12 +36,12 @@ const Map = () => {
   };
 
   return (
-    <div className="bg-[#eae7dc] min-h-screen flex flex-col items-center">
+    <div className="bg-[#eae7dc] min-h-screen flex flex-col items-center p-6">
       <Header />
 
       {/* Map Section */}
-      <section className="flex-grow w-20/30 h-[600px] bg-[#d6d2c4] flex flex-col items-center justify-center mt-0 mx-auto p-2 rounded-2xl shadow-lg border border-[#7a7867]">
-        <h1 className="text-xl font-extrabold text-center mb-1 text-[#4a4a3f]">
+      <section className="flex-grow w-20/30 h-[600px] bg-[#d6d2c4] flex flex-col items-center justify-center mt-3 mx-auto p-2 rounded-2xl shadow-lg border border-[#7a7867]">
+        <h1 className="text-xl font-extrabold text-center mb-3 text-[#4a4a3f]">
           🌍 Discover Endangered Species by Country
         </h1>
         <ComposableMap projectionConfig={{ scale: 200 }} className="rounded-lg shadow-lg">
